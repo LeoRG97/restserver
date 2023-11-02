@@ -6,6 +6,7 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
+    this.usersRoutePath = '/api/users'
 
     // middlewares
     this.middlewares();
@@ -15,40 +16,16 @@ class Server {
   }
 
   middlewares() {
+    // CORS
     this.app.use(cors());
+    // Lectura y parseo del body
+    this.app.use(express.json());
     // directorio public
-    this.app.use(express.static('public'))
+    this.app.use(express.static('public'));
   }
 
   routes() {
-    this.app.get('/api', (req, res) => {
-      res.json({
-        ok: true,
-        msg: 'Hello GET'
-      })
-    })
-
-    this.app.put('/api', (req, res) => {
-      res.json({
-        ok: true,
-        msg: 'Hello PUT'
-      })
-    })
-
-    this.app.post('/api', (req, res) => {
-      res.json({
-        ok: true,
-        msg: 'Hello POST'
-      })
-    })
-
-    this.app.delete('/api', (req, res) => {
-      res.json({
-        ok: true,
-        msg: 'Hello DELETE'
-      })
-    })
-
+    this.app.use(this.usersRoutePath, require('../routes/user.routes'))
   }
 
   listen() {
